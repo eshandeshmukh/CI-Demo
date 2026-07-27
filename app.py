@@ -1,3 +1,3 @@
-from calc import add
+from calculator import add
 
 print("Addition =", add(5,3))
