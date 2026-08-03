@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
 
     stages {
@@ -13,7 +12,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'pip install -r requirements.txt'
+                bat 'python -m pip install -r requirements.txt'
             }
         }
 
@@ -25,7 +24,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'pytest --junitxml=test-results.xml'
+                bat 'python -m pytest --junitxml=test-results.xml'
             }
         }
     }
