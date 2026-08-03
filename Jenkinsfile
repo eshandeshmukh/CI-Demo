@@ -1,73 +1,39 @@
-pipeline { 
+pipeline {
 
- 
+    agent any
 
-    agent any 
+    stages {
 
- 
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/eshandeshmukh/CI-Demo.git'
+            }
+        }
 
-    stages { 
+        stage('Install Dependencies') {
+            steps {
+                bat 'pip install -r requirements.txt'
+            }
+        }
 
- 
+        stage('Build') {
+            steps {
+                bat 'python app.py'
+            }
+        }
 
-        stage('Checkout') { 
+        stage('Test') {
+            steps {
+                bat 'pytest --junitxml=test-results.xml'
+            }
+        }
+    }
 
-            steps { 
-
-                git 'https://github.com/eshandeshmukh/CI-Demo.git' 
-
-            } 
-
-        } 
-
- 
-
-        stage('Install Dependencies') { 
-
-            steps { 
-
-                bat 'pip install -r requirements.txt' 
-
-            } 
-
-        } 
-
- 
-
-        stage('Build') { 
-
-            steps { 
-
-                bat 'python app.py' 
-
-            } 
-
-        } 
-
- 
-
-        stage('Test') { 
-
-            steps { 
-
-                bat 'pytest' 
-
-            } 
-
-        } 
-
-    } 
-
- 
-
-    post { 
-
-        always { 
-
-            junit '**/test-results.xml' 
-
-        } 
-
-    } 
-
+    post {
+        always {
+            junit testResults: 'test-results.xml',
+                  allowEmptyResults: true
+        }
+    }
 }
